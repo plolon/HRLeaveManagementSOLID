@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using HRLeaveManagement.Application.Profiles;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace HRLeaveManagement.Application
 {
-    class ApplicationServicesRegistration
+    public static class ApplicationServicesRegistration
     {
+        public static void ConfigureApplicationServices(this IServiceCollection services)
+        {
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        }
     }
 }
