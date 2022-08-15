@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HRLeaveManagement.Domain.Common;
+using System;
 
 namespace HRLeaveManagement.Domain
 {
-    public class LeaveRequest
+    public class LeaveRequest : BaseDomainEntity
     {
-        public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public LeaveType LeaveType { get; set; }

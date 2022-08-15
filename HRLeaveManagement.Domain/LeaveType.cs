@@ -1,12 +1,11 @@
-﻿using System;
+﻿using HRLeaveManagement.Domain.Common;
+using System;
 
 namespace HRLeaveManagement.Domain
 {
-    public class LeaveType
+    public class LeaveType : BaseDomainEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public int DefaultDays { get; set; }
-        public DateTime DateCreated { get; set; }
     }
 }
