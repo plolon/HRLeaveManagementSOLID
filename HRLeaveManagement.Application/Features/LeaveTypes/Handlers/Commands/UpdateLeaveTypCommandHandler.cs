@@ -2,10 +2,10 @@
 using HRLeaveManagement.Application.DTOs.LeaveType.Validators;
 using HRLeaveManagement.Application.Features.LeaveTypes.Requests.Commands;
 using HRLeaveManagement.Application.Persistence.Contracts;
-using HRLeaveManagement.Domain;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using HRLeaveManagement.Application.Exceptions;
 
 namespace HRLeaveManagement.Application.Features.LeaveTypes.Handlers.Commands
 {
@@ -24,7 +24,8 @@ namespace HRLeaveManagement.Application.Features.LeaveTypes.Handlers.Commands
             var validator = new UpdateLeaveTypeDtoValidator();
             var result = await validator.ValidateAsync(request.LeaveTypeDto);
             if (!result.IsValid)
-                throw new System.Exception();   // TODO handle exception
+                throw new ValidationException(result);
+
             var leaveType = await leaveTypeRepository.Get(request.LeaveTypeDto.Id);
             mapper.Map(request.LeaveTypeDto, leaveType);
             await leaveTypeRepository.Update(leaveType);
