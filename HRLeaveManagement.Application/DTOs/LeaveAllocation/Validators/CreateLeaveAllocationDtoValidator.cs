@@ -3,9 +3,9 @@ using HRLeaveManagement.Application.Persistence.Contracts;
 
 namespace HRLeaveManagement.Application.DTOs.LeaveAllocation.Validators
 {
-    public class CreateLeaveRequestDtoValidator : AbstractValidator<CreateLeaveAllocationDto>
+    public class CreateLeaveAllocationDtoValidator : AbstractValidator<CreateLeaveAllocationDto>
     {
-        public CreateLeaveRequestDtoValidator(ILeaveAllocationRepository leaveAllocationRepository)
+        public CreateLeaveAllocationDtoValidator(ILeaveAllocationRepository leaveAllocationRepository)
         {
             Include(new ILeaveAllocationDtoValidator(leaveAllocationRepository));
         }

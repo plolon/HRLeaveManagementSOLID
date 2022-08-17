@@ -3,7 +3,7 @@ using HRLeaveManagement.Application.Persistence.Contracts;
 
 namespace HRLeaveManagement.Application.DTOs.LeaveAllocation.Validators
 {
-    public class ILeaveAllocationDtoValidator: AbstractValidator<ILeaveAllocationDto>
+    public class ILeaveAllocationDtoValidator : AbstractValidator<ILeaveAllocationDto>
     {
         public ILeaveAllocationDtoValidator(ILeaveAllocationRepository leaveAllocationRepository)
         {
@@ -25,4 +25,5 @@ namespace HRLeaveManagement.Application.DTOs.LeaveAllocation.Validators
                     return !result;
                 }).WithMessage("{PropertyName does not exist.}");
         }
+    }
 }
