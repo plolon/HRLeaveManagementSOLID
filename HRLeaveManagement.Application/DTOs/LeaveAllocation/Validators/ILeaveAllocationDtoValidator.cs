@@ -5,7 +5,7 @@ namespace HRLeaveManagement.Application.DTOs.LeaveAllocation.Validators
 {
     public class ILeaveAllocationDtoValidator : AbstractValidator<ILeaveAllocationDto>
     {
-        public ILeaveAllocationDtoValidator(ILeaveAllocationRepository leaveAllocationRepository)
+        public ILeaveAllocationDtoValidator(ILeaveTypeRepository leaveTypeRepository)
         {
             RuleFor(x => x.NumberOfDays)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
@@ -21,7 +21,7 @@ namespace HRLeaveManagement.Application.DTOs.LeaveAllocation.Validators
                 .GreaterThan(0)
                 .MustAsync(async (id, token) =>
                 {
-                    var result = await leaveAllocationRepository.Exists(id);
+                    var result = await leaveTypeRepository.Exists(id);
                     return !result;
                 }).WithMessage("{PropertyName does not exist.}");
         }

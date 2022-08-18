@@ -5,9 +5,9 @@ namespace HRLeaveManagement.Application.DTOs.LeaveRequest.Validators
 {
     public class UpdateLeaveRequestDtoValidator :AbstractValidator<UpdateLeaveRequestDto>
     {
-        public UpdateLeaveRequestDtoValidator(ILeaveRequestRepository leaveRequestRepository)
+        public UpdateLeaveRequestDtoValidator(ILeaveTypeRepository leaveTypeRepository)
         {
-            Include(new ILeaveRequestDtoValidator(leaveRequestRepository));
+            Include(new ILeaveRequestDtoValidator(leaveTypeRepository));
 
             RuleFor(x => x.Id)
                 .NotNull().WithMessage("{PropertyName must be present.}");

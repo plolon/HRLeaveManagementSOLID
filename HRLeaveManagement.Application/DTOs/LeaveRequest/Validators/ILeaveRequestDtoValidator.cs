@@ -5,11 +5,8 @@ namespace HRLeaveManagement.Application.DTOs.LeaveRequest.Validators
 {
     public class ILeaveRequestDtoValidator : AbstractValidator<ILeaveRequestDto>
     {
-        private readonly ILeaveRequestRepository leaveRequestRepository;
-
-        public ILeaveRequestDtoValidator(ILeaveRequestRepository leaveRequestRepository)
+        public ILeaveRequestDtoValidator(ILeaveTypeRepository leaveTypeRepository)
         {
-            this.leaveRequestRepository = leaveRequestRepository;
             RuleFor(x => x.StartDate)
                 .LessThan(x => x.EndDate)
                 .WithMessage("{PropertyName} must be before {ComparsionValue}.");
@@ -20,7 +17,7 @@ namespace HRLeaveManagement.Application.DTOs.LeaveRequest.Validators
                 .GreaterThan(0)
                 .MustAsync(async (id, token) =>
                 {
-                    var result = await leaveRequestRepository.Exists(id);
+                    var result = await leaveTypeRepository.Exists(id);
                     return !result;
                 }).WithMessage("{PropertyName does not exist.}");
         }
