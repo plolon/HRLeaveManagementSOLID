@@ -31,6 +31,14 @@ namespace HRLeaveManagement.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HRLeaveManagement.Api", Version = "v1" });
             });
+            services.AddCors(x =>
+            {
+                x.AddPolicy("CorsPolicy",
+                    builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +56,8 @@ namespace HRLeaveManagement.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
