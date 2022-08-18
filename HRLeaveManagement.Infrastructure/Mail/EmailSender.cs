@@ -16,7 +16,6 @@ namespace HRLeaveManagement.Infrastructure.Mail
             this.emailSettings = emailSettings.Value;
         }
 
-
         public async Task<bool> SendEmail(Email email)
         {
             var client = new SendGridClient(emailSettings.ApiKey);
