@@ -1,4 +1,4 @@
-﻿using HRLeaveManagement.Application.Persistence.Contracts;
+﻿using HRLeaveManagement.Application.Contracts.Persistence;
 using HRLeaveManagement.Domain;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
