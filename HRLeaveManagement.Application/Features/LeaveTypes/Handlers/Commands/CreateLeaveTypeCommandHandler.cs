@@ -7,10 +7,12 @@ using HRLeaveManagement.Domain;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using HRLeaveManagement.Application.Responses;
+using System.Linq;
 
 namespace HRLeaveManagement.Application.Features.LeaveTypes.Handlers.Commands
 {
-    public class CreateLeaveTypeCommandHandler : IRequestHandler<CreateLeaveTypeCommand, int>
+    public class CreateLeaveTypeCommandHandler : IRequestHandler<CreateLeaveTypeCommand, BaseCommandResponse>
     {
         private readonly ILeaveTypeRepository leaveTypeRepository;
         private readonly IMapper mapper;
@@ -19,16 +21,28 @@ namespace HRLeaveManagement.Application.Features.LeaveTypes.Handlers.Commands
             this.leaveTypeRepository = leaveTypeRepository;
             this.mapper = mapper;
         }
-        public async Task<int> Handle(CreateLeaveTypeCommand request, CancellationToken cancellationToken)
+        public async Task<BaseCommandResponse> Handle(CreateLeaveTypeCommand request, CancellationToken cancellationToken)
         {
+            var response = new BaseCommandResponse();
             var validator = new CreateLeaveTypeDtoValidator();
-            var result = await validator.ValidateAsync(request.LeaveTypeDto);
-            if (!result.IsValid)
-                throw new ValidationException(result);
+            var validationResult = await validator.ValidateAsync(request.LeaveTypeDto);
+            if (!validationResult.IsValid)
+            {
+                response.Success = false;
+                response.Message = "Update Failed";
+                response.Errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
+            }
+            else
+            {
+                var leaveType = mapper.Map<LeaveType>(request.LeaveTypeDto);
+                leaveType = await leaveTypeRepository.Add(leaveType);
 
-            var leaveType = mapper.Map<LeaveType>(request.LeaveTypeDto);
-            leaveType = await leaveTypeRepository.Add(leaveType);
-            return leaveType.Id;
+                response.Success = true;
+                response.Message = "Update Successful";
+                response.Id = leaveType.Id;
+            }
+
+            return response;
         }
     }
 }

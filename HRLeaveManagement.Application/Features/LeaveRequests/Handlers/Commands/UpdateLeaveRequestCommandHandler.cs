@@ -37,14 +37,15 @@ namespace HRLeaveManagement.Application.Features.LeaveRequests.Handlers.Commands
                     response.Message = "Update Failed";
                     response.Errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
                 }
+                else
+                {
+                    response.Success = true;
+                    response.Message = "Update Successful";
+                    response.Id = leaveRequest.Id;
+                }
 
                 mapper.Map(request.LeaveRequestDto, leaveRequest);
                 await leaveRequestRepository.Update(leaveRequest);
-
-                response.Success = true;
-                response.Message = "Update Successful";
-                response.Id = leaveRequest.Id;
-
             }
             else if (request.ChangeLeaveRequestApprovalDto != null)
             {
