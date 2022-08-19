@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HRLeaveManagement.Application.Features.LeaveAllocations.Handlers.Queries
 {
-    public class GetLeaveRequestListRequestHandler : IRequestHandler<GetLeaveRequestListRequest, List<LeaveAllocationDto>>
+    public class GetLeaveRequestListRequestHandler : IRequestHandler<GetLeaveAllocationListRequest, List<LeaveAllocationDto>>
     {
         private readonly ILeaveAllocationRepository leaveAllocationRepository;
         private readonly IMapper mapper;
@@ -20,7 +20,7 @@ namespace HRLeaveManagement.Application.Features.LeaveAllocations.Handlers.Queri
             this.mapper = mapper;
         }
 
-        public async Task<List<LeaveAllocationDto>> Handle(GetLeaveRequestListRequest request, CancellationToken cancellationToken)
+        public async Task<List<LeaveAllocationDto>> Handle(GetLeaveAllocationListRequest request, CancellationToken cancellationToken)
         {
             var results = await leaveAllocationRepository.GetAll();
             return mapper.Map<List<LeaveAllocationDto>>(results);
