@@ -29,7 +29,7 @@ namespace HRLeaveManagement.Application.Features.LeaveTypes.Handlers.Commands
             if (!validationResult.IsValid)
             {
                 response.Success = false;
-                response.Message = "Update Failed";
+                response.Message = "Create Failed";
                 response.Errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
             }
             else
@@ -38,7 +38,7 @@ namespace HRLeaveManagement.Application.Features.LeaveTypes.Handlers.Commands
                 leaveType = await leaveTypeRepository.Add(leaveType);
 
                 response.Success = true;
-                response.Message = "Update Successful";
+                response.Message = "Create Successful";
                 response.Id = leaveType.Id;
             }
 
