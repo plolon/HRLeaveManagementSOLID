@@ -45,7 +45,7 @@ namespace HRLeaveManagement.Api.Controllers
         }
 
         // PUT api/<LeaveAllocationsController>
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<ActionResult> Put([FromBody] UpdateLeaveAllocationDto updateLeaveAllocationDto)
         {
             await mediator.Send(new UpdateLeaveAllocationCommand { LeaveAllocationDto = updateLeaveAllocationDto });
