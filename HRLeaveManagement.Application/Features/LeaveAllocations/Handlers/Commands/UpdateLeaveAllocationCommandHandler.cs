@@ -6,10 +6,12 @@ using HRLeaveManagement.Application.Contracts.Persistence;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using HRLeaveManagement.Application.Responses;
+using System.Linq;
 
 namespace HRLeaveManagement.Application.Features.LeaveAllocations.Handlers.Commands
 {
-    public class UpdateLeaveAllocationCommandHandler : IRequestHandler<UpdateLeaveAllocationCommand, Unit>
+    public class UpdateLeaveAllocationCommandHandler : IRequestHandler<UpdateLeaveAllocationCommand, BaseCommandResponse>
     {
         private readonly ILeaveAllocationRepository leaveAllocationRepository;
         private readonly ILeaveTypeRepository leaveTypeRepository;
@@ -21,17 +23,33 @@ namespace HRLeaveManagement.Application.Features.LeaveAllocations.Handlers.Comma
             this.leaveTypeRepository = leaveTypeRepository;
             this.mapper = mapper;
         }
-        public async Task<Unit> Handle(UpdateLeaveAllocationCommand request, CancellationToken cancellationToken)
+        public async Task<BaseCommandResponse> Handle(UpdateLeaveAllocationCommand request, CancellationToken cancellationToken)
         {
+            BaseCommandResponse response;
             var validator = new UpdateLeaveAllocationDtoValidator(leaveTypeRepository);
-            var result = await validator.ValidateAsync(request.LeaveAllocationDto);
-            if (!result.IsValid)
-                throw new ValidationException(result);
-
-            var leaveAllocation = await leaveAllocationRepository.Get(request.LeaveAllocationDto.Id);
-            mapper.Map(request.LeaveAllocationDto, leaveAllocation);
-            await leaveAllocationRepository.Update(leaveAllocation);
-            return Unit.Value;
+            var validationResult = await validator.ValidateAsync(request.LeaveAllocationDto);
+            if (!validationResult.IsValid)
+            {
+                response = new BaseCommandResponse
+                {
+                    Success = false,
+                    Message = "Update Failed",
+                    Errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList()
+                };
+            }
+            else
+            {
+                var leaveAllocation = await leaveAllocationRepository.Get(request.LeaveAllocationDto.Id);
+                mapper.Map(request.LeaveAllocationDto, leaveAllocation);
+                await leaveAllocationRepository.Update(leaveAllocation);
+                response = new BaseCommandResponse
+                {
+                    Success = true,
+                    Message = "Update Successful",
+                    Id = leaveAllocation.Id
+                };
+            }
+            return response;
         }
     }
 }

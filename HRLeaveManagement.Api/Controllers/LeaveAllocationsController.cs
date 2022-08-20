@@ -1,6 +1,7 @@
 ﻿using HRLeaveManagement.Application.DTOs.LeaveAllocation;
 using HRLeaveManagement.Application.Features.LeaveAllocations.Requests.Commands;
 using HRLeaveManagement.Application.Features.LeaveAllocations.Requests.Queries;
+using HRLeaveManagement.Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace HRLeaveManagement.Api.Controllers
 
         // POST api/<LeaveAllocationsController>
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody] CreateLeaveAllocationDto createLeaveAllocationDto)
+        public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateLeaveAllocationDto createLeaveAllocationDto)
         {
             var response = await mediator.Send(new CreateLeaveAllocationCommand { LeaveAllocationDto = createLeaveAllocationDto });
             return Ok(response);
@@ -46,18 +47,18 @@ namespace HRLeaveManagement.Api.Controllers
 
         // PUT api/<LeaveAllocationsController>
         [HttpPut]
-        public async Task<ActionResult> Put([FromBody] UpdateLeaveAllocationDto updateLeaveAllocationDto)
+        public async Task<ActionResult<BaseCommandResponse>> Put([FromBody] UpdateLeaveAllocationDto updateLeaveAllocationDto)
         {
-            await mediator.Send(new UpdateLeaveAllocationCommand { LeaveAllocationDto = updateLeaveAllocationDto });
-            return NoContent();
+            var response = await mediator.Send(new UpdateLeaveAllocationCommand { LeaveAllocationDto = updateLeaveAllocationDto });
+            return Ok(response);
         }
 
         // DELETE api/<LeaveAllocationsController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<BaseCommandResponse>> Delete(int id)
         {
-            await mediator.Send(new DeleteLeaveAllocationCommand { Id = id });
-            return NoContent();
+            var response = await mediator.Send(new DeleteLeaveAllocationCommand { Id = id });
+            return Ok(response);
         }
     }
 }

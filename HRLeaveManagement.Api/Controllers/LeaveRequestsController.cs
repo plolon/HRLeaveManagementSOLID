@@ -52,21 +52,21 @@ namespace HRLeaveManagement.Api.Controllers
         public async Task<ActionResult<BaseCommandResponse>> Put(int id, [FromBody] UpdateLeaveRequestDto updateLeaveRequestDto)
         {
             var response = await mediator.Send(new UpdateLeaveRequestCommand { Id = id, LeaveRequestDto = updateLeaveRequestDto });
-            return response;
+            return Ok(response);
         }
         // PUT api/<LeaveRequestsController>/changeapproval/5
         [HttpPut("changeapproval/{id}")]
         public async Task<ActionResult<BaseCommandResponse>> ChangeApproval(int id, [FromBody] ChangeLeaveRequestApprovalDto changeLeaveRequestApprovalDto)
         {
             var response = await mediator.Send(new UpdateLeaveRequestCommand { Id = id, ChangeLeaveRequestApprovalDto = changeLeaveRequestApprovalDto });
-            return response;
+            return Ok(response);
         }
         // DELETE api/<LeaveRequestsController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<BaseCommandResponse>> Delete(int id)
         {
             var response = await mediator.Send(new DeleteLeaveRequestCommand { Id = id });
-            return NoContent();
+            return Ok(response);
         }
     }
 }

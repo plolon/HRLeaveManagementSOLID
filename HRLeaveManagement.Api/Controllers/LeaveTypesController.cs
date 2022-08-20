@@ -47,18 +47,18 @@ namespace HRLeaveManagement.Api.Controllers
 
         // PUT api/<LeaveTypesController>
         [HttpPut]
-        public async Task<ActionResult> Put([FromBody] LeaveTypeDto leaveTypeDto)
+        public async Task<ActionResult<BaseCommandResponse>> Put([FromBody] LeaveTypeDto leaveTypeDto)
         {
-            await mediator.Send(new UpdateLeaveTypeCommand { LeaveTypeDto = leaveTypeDto });
-            return NoContent();
+            var response = await mediator.Send(new UpdateLeaveTypeCommand { LeaveTypeDto = leaveTypeDto });
+            return Ok(response);
         }
 
         // DELETE api/<LeaveTypesController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<BaseCommandResponse>> Delete(int id)
         {
             var response = await mediator.Send(new DeleteLeaveTypeCommand { Id = id });
-            return NoContent();
+            return Ok(response);
         }
     }
 }

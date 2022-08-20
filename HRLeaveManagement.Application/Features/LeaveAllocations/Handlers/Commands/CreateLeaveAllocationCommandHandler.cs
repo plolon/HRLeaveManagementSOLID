@@ -7,10 +7,12 @@ using HRLeaveManagement.Domain;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using HRLeaveManagement.Application.Responses;
+using System.Linq;
 
 namespace HRLeaveManagement.Application.Features.LeaveAllocations.Handlers.Commands
 {
-    public class CreateLeaveAllocationCommandHandler : IRequestHandler<CreateLeaveAllocationCommand, int>
+    public class CreateLeaveAllocationCommandHandler : IRequestHandler<CreateLeaveAllocationCommand, BaseCommandResponse>
     {
         private readonly ILeaveAllocationRepository leaveAllocationRepository;
         private readonly ILeaveTypeRepository leaveTypeRepository;
@@ -22,16 +24,32 @@ namespace HRLeaveManagement.Application.Features.LeaveAllocations.Handlers.Comma
             this.leaveTypeRepository = leaveTypeRepository;
             this.mapper = mapper;
         }
-        public async Task<int> Handle(CreateLeaveAllocationCommand request, CancellationToken cancellationToken)
+        public async Task<BaseCommandResponse> Handle(CreateLeaveAllocationCommand request, CancellationToken cancellationToken)
         {
+            BaseCommandResponse response;
             var validator = new CreateLeaveAllocationDtoValidator(leaveTypeRepository);
-            var result = await validator.ValidateAsync(request.LeaveAllocationDto);
-            if (!result.IsValid)
-                throw new ValidationException(result);
-
-            var leaveAllocation = mapper.Map<LeaveAllocation>(request.LeaveAllocationDto);
-            leaveAllocation = await leaveAllocationRepository.Add(leaveAllocation);
-            return leaveAllocation.Id;
+            var validationResult = await validator.ValidateAsync(request.LeaveAllocationDto);
+            if (!validationResult.IsValid)
+            {
+                response = new BaseCommandResponse
+                {
+                    Success = false,
+                    Message = "Create Failed",
+                    Errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList()
+                };
+            }
+            else
+            {
+                var leaveAllocation = mapper.Map<LeaveAllocation>(request.LeaveAllocationDto);
+                leaveAllocation = await leaveAllocationRepository.Add(leaveAllocation);
+                response = new BaseCommandResponse
+                {
+                    Success = true,
+                    Message = "Create Successful",
+                    Id = leaveAllocation.Id
+                };
+            }
+            return response;
         }
     }
 }
