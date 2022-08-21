@@ -37,7 +37,8 @@ namespace HRLeaveManagement.Application.UnitTests.Mocs
                 leaveTypes.Add(leaveType);
                 return leaveType;
             });
-
+            mockRepo.Setup(x => x.Delete(It.IsAny<LeaveType>())).Verifiable();
+            mockRepo.Setup(x => x.Update(It.IsAny<LeaveType>())).Verifiable();
             return mockRepo;
         }
     }
