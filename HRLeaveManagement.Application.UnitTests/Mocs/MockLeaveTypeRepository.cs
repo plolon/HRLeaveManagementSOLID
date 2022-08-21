@@ -2,6 +2,7 @@
 using HRLeaveManagement.Domain;
 using Moq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HRLeaveManagement.Application.UnitTests.Mocs
 {
@@ -27,6 +28,10 @@ namespace HRLeaveManagement.Application.UnitTests.Mocs
             var mockRepo = new Mock<ILeaveTypeRepository>();
 
             mockRepo.Setup(x => x.GetAll()).ReturnsAsync(leaveTypes);
+            mockRepo.Setup(x => x.Get(It.IsAny<int>())).ReturnsAsync((int id) =>
+            {
+                return leaveTypes.FirstOrDefault(x => x.Id.Equals(id));
+            });
             mockRepo.Setup(x => x.Add(It.IsAny<LeaveType>())).ReturnsAsync((LeaveType leaveType) =>
             {
                 leaveTypes.Add(leaveType);

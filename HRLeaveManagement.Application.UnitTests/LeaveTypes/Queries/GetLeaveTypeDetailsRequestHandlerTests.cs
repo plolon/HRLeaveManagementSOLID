@@ -7,19 +7,18 @@ using HRLeaveManagement.Application.Profiles;
 using HRLeaveManagement.Application.UnitTests.Mocs;
 using Moq;
 using Shouldly;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace HRLeaveManagement.Application.UnitTests.LeaveTypes.Queries
 {
-    public class GetLeaveTypeListRequestHandlerTests
+    public class GetLeaveTypeDetailsRequestHandlerTests
     {
         private readonly IMapper mapper;
         private readonly Mock<ILeaveTypeRepository> mockRepo;
 
-        public GetLeaveTypeListRequestHandlerTests()
+        public GetLeaveTypeDetailsRequestHandlerTests()
         {
             mockRepo = MockLeaveTypeRepository.GetLeaveTypeMockedRepository();
 
@@ -32,14 +31,23 @@ namespace HRLeaveManagement.Application.UnitTests.LeaveTypes.Queries
         }
 
         [Fact]
-        public async Task GetLeaveTypeListTest()
+        public async Task Valid_GetLeaveTypeDetailsTest()
         {
-            var handler = new GetLeaveTypeListRequestHandler(mockRepo.Object, mapper);
+            var handler = new GetLeaveTypeDetailsRequestHandler(mockRepo.Object, mapper);
 
-            var result = await handler.Handle(new GetLeaveTypeListRequest(), CancellationToken.None);
+            var result = await handler.Handle(new GetLeaveTypeDetailsRequest {Id = 1 }, CancellationToken.None);
 
-            result.ShouldBeOfType<List<LeaveTypeDto>>();
-            result.Count.ShouldBe(2);
+            result.ShouldBeOfType<LeaveTypeDto>();
+            result.Id.ShouldBe(1);
+        }
+        [Fact]
+        public async Task InValid_GetLeaveTypeDetailsTest()
+        {
+            var handler = new GetLeaveTypeDetailsRequestHandler(mockRepo.Object, mapper);
+
+            var result = await handler.Handle(new GetLeaveTypeDetailsRequest { Id = 10 }, CancellationToken.None);
+
+            result.ShouldBe(null);
         }
     }
 }
