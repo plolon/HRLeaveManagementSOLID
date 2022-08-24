@@ -1,10 +1,13 @@
+using HRLeaveManagement.MVC.Contracts;
 using HRLeaveManagement.MVC.Services;
+using HRLeaveManagement.MVC.Services.Base;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Reflection;
 
 namespace HRLeaveManagement.MVC
 {
@@ -21,7 +24,8 @@ namespace HRLeaveManagement.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient<IClient, Client>(client => client.BaseAddress = new Uri("https://localhost:44315"));
-
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddSingleton<ILocalStorageService, LocalStorageService>();
             services.AddControllersWithViews();
         }
 
