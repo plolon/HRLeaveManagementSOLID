@@ -25,6 +25,9 @@ namespace HRLeaveManagement.MVC
         {
             services.AddHttpClient<IClient, Client>(client => client.BaseAddress = new Uri("https://localhost:44315"));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+
+
             services.AddSingleton<ILocalStorageService, LocalStorageService>();
             services.AddControllersWithViews();
         }
